@@ -20,6 +20,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttribu
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
 import com.project.dispatchandroid.utils.AppHelper;
+import com.project.dispatchandroid.R;
 
 public class RegisterUserActivity extends AppCompatActivity {
     private final String TAG = "SignUp";
@@ -53,7 +54,7 @@ public class RegisterUserActivity extends AppCompatActivity {
             }
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_Register);
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_Register);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -66,7 +67,7 @@ public class RegisterUserActivity extends AppCompatActivity {
             public void onClick(View v) {
                 onBackPressed();
             }
-        });
+        });*/
         init();
     }
 
@@ -103,7 +104,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         password.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if(s.length() == 0) {
+                if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewRegUserPasswordLabel);
                     label.setText(password.getHint());
                     password.setBackground(getDrawable(R.drawable.text_border_selector));
@@ -119,7 +120,7 @@ public class RegisterUserActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.length() == 0) {
+                if (s.length() == 0) {
                     TextView label = (TextView) findViewById(R.id.textViewRegUserPasswordLabel);
                     label.setText("");
                 }
@@ -267,9 +268,8 @@ public class RegisterUserActivity extends AppCompatActivity {
             Boolean regState = signUpConfirmationState;
             if (signUpConfirmationState) {
                 // User is already confirmed
-                showDialogMessage("Sign up successful!",usernameInput+" has been Confirmed", true);
-            }
-            else {
+                showDialogMessage("Sign up successful!", usernameInput + " has been Confirmed", true);
+            } else {
                 // User is not confirmed
                 confirmSignUp(cognitoUserCodeDeliveryDetails);
             }
@@ -281,13 +281,13 @@ public class RegisterUserActivity extends AppCompatActivity {
             TextView label = (TextView) findViewById(R.id.textViewRegUserIdMessage);
             label.setText("Sign up failed");
             username.setBackground(getDrawable(R.drawable.text_border_error));
-            showDialogMessage("Sign up failed",AppHelper.formatException(exception),false);
+            showDialogMessage("Sign up failed", AppHelper.formatException(exception), false);
         }
     };
 
     private void confirmSignUp(CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
-        Intent intent = new Intent(this, SignUpConfirm.class);
-        intent.putExtra("source","signup");
+        Intent intent = new Intent(this, SignupConfirmActivity.class);
+        intent.putExtra("source", "signup");
         intent.putExtra("name", usernameInput);
         intent.putExtra("destination", cognitoUserCodeDeliveryDetails.getDestination());
         intent.putExtra("deliveryMed", cognitoUserCodeDeliveryDetails.getDeliveryMedium());
@@ -298,9 +298,9 @@ public class RegisterUserActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 10) {
-            if(resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
                 String name = null;
-                if(data.hasExtra("name")) {
+                if (data.hasExtra("name")) {
                     name = data.getStringExtra("name");
                 }
                 exit(name, userPasswd);
@@ -315,11 +315,11 @@ public class RegisterUserActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     userDialog.dismiss();
-                    if(exit) {
+                    if (exit) {
                         exit(usernameInput);
                     }
                 } catch (Exception e) {
-                    if(exit) {
+                    if (exit) {
                         exit(usernameInput);
                     }
                 }
@@ -339,8 +339,7 @@ public class RegisterUserActivity extends AppCompatActivity {
     private void closeWaitDialog() {
         try {
             waitDialog.dismiss();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             //
         }
     }
